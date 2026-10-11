@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evaluasi MBG SMP DAFI</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .container { background: white; max-width: 500px; width: 100%; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .page { display: none; }
+        .page.active { display: block; animation: fadeIn 0.4s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        h2, h3 { color: #2c3e50; text-align: center; margin-bottom: 20px; }
+        p, li { color: #555; line-height: 1.6; }
+        .info-box { background: #e8f4f8; padding: 15px; border-radius: 8px; border-left: 5px solid #3498db; margin-bottom: 20px; }
+        ul { padding-left: 20px; margin-top: 10px; }
+        .carousel { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 10px; padding-bottom: 10px; border-radius: 8px; }
+        .carousel img { width: 100%; flex: 0 0 100%; scroll-snap-align: start; border-radius: 8px; object-fit: cover; height: 250px; background: #ddd; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: bold; color: #333; }
+        input[type="text"], textarea, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
+        .radio-group label { font-weight: normal; display: flex; align-items: center; gap: 8px; padding: 8px; background: #f9f9f9; border-radius: 5px; cursor: pointer; margin-bottom: 5px; border: 1px solid #eee; }
+        .radio-group label:hover { background: #f1f1f1; }
+        .btn-group { display: flex; justify-content: space-between; margin-top: 20px; gap: 10px;}
+        button { padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; transition: 0.3s; }
+        .btn-primary { background: #27ae60; color: white; }
+        .btn-primary:hover { background: #219150; }
+        .btn-secondary { background: #95a5a6; color: white; }
+        .btn-next { background: #3498db; color: white; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <form id="mbgForm">
+        
+        <!-- HALAMAN 1 -->
+        <div class="page active" id="p1">
+            <h2>Form Evaluasi Pelaksanaan MBG di SMP DAFI</h2>
+            <p style="text-align: center;">Suara santri dan dukungan orang tua sangat menentukan kualitas layanan gizi di sekolah.</p>
+            <button type="button" class="btn-primary" onclick="showPage('p2')">Mulai</button>
+        </div>
+
+        <!-- HALAMAN 2 -->
+        <div class="page" id="p2">
+            <h2>Informasi Program</h2>
+            <p>SMP DAFI telah bekerja sama dengan SPPG Cemengkalang (Instagram <a href="https://instagram.com/cemengkalang" target="_blank">@cemengkalang</a>) sejak Januari 2026.</p>
+            <p><strong>Beberapa porsi harian MBG:</strong></p>
+            <div class="carousel">
+                <img src="foto-menu-1.jpg" onerror="this.src='https://via.placeholder.com/400x250?text=Foto+Menu+1'">
+                <img src="foto-menu-2.jpg" onerror="this.src='https://via.placeholder.com/400x250?text=Foto+Menu+2'">
+            </div>
+            <div class="btn-group">
+                <button type="button" class="btn-secondary" onclick="showPage('p1')">Kembali</button>
+                <button type="button" class="btn-next" onclick="showPage('p3')">Lanjut</button>
+            </div>
+        </div>
+
+        <!-- HALAMAN 3 (Identitas & Peran) -->
+        <div class="page" id="p3">
+            <h2>Identitas Pengisi</h2>
+            <div class="form-group">
+                <label>Nama Lengkap Santri</label>
+                <input type="text" name="nama" id="nama">
+            </div>
+            <div class="form-group">
+                <label>Kelas</label>
+                <input type="text" name="kelas" id="kelas">
+            </div>
+            <div class="form-group radio-group">
+                <label><strong>Siapa yang mengisi form ini?</strong></label>
+                <label><input type="radio" name="peran" value="Santri"> Santri secara langsung</label>
+                <label><input type="radio" name="peran" value="Orang Tua"> Orang Tua / Wali Santri</label>
+            </div>
+            <div class="btn-group">
+                <button type="button" class="btn-secondary" onclick="showPage('p2')">Kembali</button>
+                <button type="button" class="btn-next" onclick="processIdentity()">Lanjut</button>
+            </div>
+        </div>
+
+        <!-- ================= JALUR 1: SANTRI ================= -->
+        <div class="page" id="p4a">
+            <h2>Evaluasi Santri</h2>
+            <div class="form-group radio-group">
+                <label><strong>1. Bagaimana rasa makanan MBG selama ini?</strong></label>
+                <label><input type="radio" name="rasa_siswa" value="Sangat Enak"> Sangat Enak</label>
+                <label><input type="radio" name="rasa_siswa" value="Biasa Saja"> Biasa Saja</label>
+                <label><input type="radio" name="rasa_siswa" value="Kurang Enak"> Kurang Enak</label>
+            </div>
+            <div class="form-group radio-group">
+                <label><strong>2. Apakah porsi makanannya cukup?</strong></label>
+                <label><input type="radio" name="porsi_siswa" value="Kurang"> Kurang</label>
+                <label><input type="radio" name="porsi_siswa" value="Pas"> Pas</label>
+                <label><input type="radio" name="porsi_siswa" value="Terlalu Banyak"> Terlalu Banyak</label>
+            </div>
+            <div class="form-group radio-group">
+                <label><strong>3. Apakah kamu ingin terus makan MBG di sekolah?</strong></label>
+                <label><input type="radio" name="lanjut_siswa" value="Ya" onchange="toggleAlasanSiswa()"> Ya, saya ingin</label>
+                <label><input type="radio" name="lanjut_siswa" value="Tidak" onchange="toggleAlasanSiswa()"> Tidak ingin</label>
+            </div>
+            <div class="form-group hidden" id="box_alasan_siswa">
+                <label>Kenapa kamu tidak ingin? (Ceritakan alasannya)</label>
+                <textarea name="alasan_siswa" rows="2"></textarea>
+            </div>
+            <div class="btn-group">
+                <button type="button" class="btn-secondary" onclick="showPage('p3')">Kembali</button>
+                <button type="button" class="btn-primary" onclick="submitForm()">Kirim Evaluasi</button>
+            </div>
+        </div>
+
+        <!-- ================= JALUR 2: ORANG TUA ================= -->
+        <!-- HALAMAN 4B-1: Info Keunikan MBG -->
+        <div class="page" id="p4b1">
+            <h2>Konteks MBG di SMP DAFI</h2>
+            <div class="info-box">
+                Sebagai informasi bagi Bapak/Ibu, MBG di SMP DAFI memiliki 3 penyesuaian khusus dibandingkan MBG pada umumnya:
+                <ul>
+                    <li><strong>Pengganti Nasi:</strong> Menu Nasi pada MBG diganti dengan sumber karbohidrat lain seperti kentang, roti, dan lontong.</li>
+                    <li><strong>Makan Siang Utama Tetap:</strong> Santri tetap mendapatkan menu makan siang utama dari Koperasi/Kantin.</li>
+                    <li><strong>Fasilitas Puasa:</strong> Bagi santri yang berpuasa, beberapa menu MBG dapat disimpan untuk berbuka puasa dengan pantauan langsung dari Wali Kelas.</li>
+                </ul>
+            </div>
+            <div class="btn-group">
+                <button type="button" class="btn-secondary" onclick="showPage('p3')">Kembali</button>
+                <button type="button" class="btn-next" onclick="showPage('p4b2')">Lanjut</button>
+            </div>
+        </div>
+
+        <!-- HALAMAN 4B-2: Persetujuan Orang Tua -->
+        <div class="page" id="p4b2">
+            <h2>Persetujuan Orang Tua</h2>
+            <div class="form-group">
+                <label>Catatan / Keluhan dari ananda selama ini (Opsional):</label>
+                <textarea name="keluhan_ortu" rows="3"></textarea>
+            </div>
+            <div class="form-group radio-group">
+                <label><strong>Apakah Bapak/Ibu mengizinkan ananda untuk terus mengikuti program MBG ini?</strong></label>
+                <label><input type="radio" name="izin_ortu" value="Mengizinkan"> Ya, Mengizinkan (Setuju)</label>
+                <label><input type="radio" name="izin_ortu" value="Tidak Mengizinkan"> Tidak Mengizinkan (Menolak)</label>
+            </div>
+            <div class="btn-group">
+                <button type="button" class="btn-secondary" onclick="showPage('p4b1')">Kembali</button>
+                <button type="button" class="btn-next" onclick="processIzinOrtu()">Lanjut</button>
+            </div>
+        </div>
+
+        <!-- HALAMAN 5: Konfirmasi Penolakan Orang Tua -->
+        <div class="page" id="p5">
+            <h2>Konfirmasi Lanjutan</h2>
+            <div class="form-group radio-group">
+                <label><strong>Jika menolak program ini, apakah Bapak/Ibu bersedia jika HANYA ananda yang tidak mendapatkan fasilitas MBG (wajib bawa bekal sendiri)?</strong></label>
+                <label><input type="radio" name="bawa_bekal" value="Ya"> Ya, bersedia bawakan bekal mandiri</label>
+                <label><input type="radio" name="bawa_bekal" value="Tidak"> Tidak bersedia</label>
+            </div>
+            <div class="form-group">
+                <label>Mohon tuliskan alasan atau usulan solusi Bapak/Ibu:</label>
+                <textarea name="alasan_ortu" rows="3"></textarea>
+            </div>
+            <div class="btn-group">
+                <button type="button" class="btn-secondary" onclick="showPage('p4b2')">Kembali</button>
+                <button type="button" class="btn-primary" onclick="submitForm()">Kirim Evaluasi</button>
+            </div>
+        </div>
+
+        <!-- HALAMAN 6: Penutup -->
+        <div class="page" id="p6">
+            <h2>Terima Kasih!</h2>
+            <p style="text-align: center;">Data evaluasi telah berhasil disimpan. Masukan Anda sangat berharga untuk perbaikan layanan di SMP DAFI.</p>
+        </div>
+
+    </form>
+</div>
+
+<script>
+    // GANTI DENGAN URL WEB APP GAS ANDA!
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbyfxhVZWkX-uvRjsD8kE1KDuu40rmwGJrQXT6UOTJrXYbsYMwZiM2QstaDEg2447EzrDQ/exec";
+
+    function showPage(pageId) {
+        document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+        document.getElementById(pageId).classList.add('active');
+    }
+
+    // Navigasi setelah Halaman 3 (Identitas)
+    function processIdentity() {
+        let nama = document.getElementById('nama').value;
+        let peran = document.querySelector('input[name="peran"]:checked');
+
+        if(nama.trim() === "" || !peran) {
+            alert("Harap lengkapi Nama Santri dan Pilihan Pengisi form.");
+            return;
+        }
+
+        if (peran.value === "Santri") {
+            showPage('p4a');
+        } else {
+            showPage('p4b1');
+        }
+    }
+
+    // Toggle textarea alasan santri jika pilih tidak lanjut
+    function toggleAlasanSiswa() {
+        let lanjut = document.querySelector('input[name="lanjut_siswa"]:checked').value;
+        let boxAlasan = document.getElementById('box_alasan_siswa');
+        if(lanjut === "Tidak") {
+            boxAlasan.classList.remove('hidden');
+        } else {
+            boxAlasan.classList.add('hidden');
+            document.querySelector('textarea[name="alasan_siswa"]').value = "";
+        }
+    }
+
+    // Navigasi setelah Halaman 4B-2 (Izin Ortu)
+    function processIzinOrtu() {
+        let izin = document.querySelector('input[name="izin_ortu"]:checked');
+        if(!izin) {
+            alert("Harap pilih salah satu opsi persetujuan.");
+            return;
+        }
+
+        if(izin.value === "Tidak Mengizinkan") {
+            showPage('p5'); // Lanjut konfirmasi tolak
+        } else {
+            submitForm(); // Langsung kirim
+        }
+    }
+
+    // Fungsi Pengiriman Data ke GAS
+    function submitForm() {
+        const btns = document.querySelectorAll('.btn-primary');
+        btns.forEach(btn => { btn.innerText = 'Mengirim...'; btn.disabled = true; });
+
+        const form = document.getElementById('mbgForm');
+        const formData = new FormData(form);
+
+        fetch(GAS_URL, { method: 'POST', body: formData })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === "sukses") {
+                showPage('p6');
+            } else {
+                alert('Terjadi kesalahan, coba lagi.');
+                btns.forEach(btn => { btn.innerText = 'Kirim Evaluasi'; btn.disabled = false; });
+            }
+        })
+        .catch(error => {
+            alert('Gagal mengirim data. Cek koneksi internet Anda.');
+            btns.forEach(btn => { btn.innerText = 'Kirim Evaluasi'; btn.disabled = false; });
+        });
+    }
+</script>
+</body>
+</html>
