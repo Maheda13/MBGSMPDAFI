@@ -399,8 +399,8 @@
                 <h2>Konfirmasi Lanjutan</h2>
                 <p class="lead">Beberapa pertanyaan tambahan karena Bapak/Ibu memilih tidak mengizinkan.</p>
                 <fieldset class="radio-group" id="fs-bekal">
-                    <legend>Apakah Bapak/Ibu bersedia jika HANYA ananda yang tidak mendapat fasilitas MBG (membawa bekal)?</legend>
-                    <label><input type="radio" name="bawa_bekal" value="Ya"> Ya, bersedia bawakan bekal mandiri</label>
+                    <legend>Apakah Bapak/Ibu bersedia jika HANYA ananda yang tidak mendapat fasilitas MBG?</legend>
+                    <label><input type="radio" name="bawa_bekal" value="Ya"> Ya, bersedia</label>
                     <label><input type="radio" name="bawa_bekal" value="Tidak"> Tidak bersedia</label>
                 </fieldset>
                 <div class="field">
@@ -418,6 +418,7 @@
                 <div class="done-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></div>
                 <h2>Terima Kasih!</h2>
                 <p>Data evaluasi telah berhasil disimpan. Masukan Anda sangat berharga untuk perbaikan layanan di SMP DAFI.</p>
+                <p>Jika terdapat pertanyaan atau membutuhkan informasi lebih lanjut, Bapak/ibu dapat langsung menghubungi Wali Kelas.</p>
                 <p class="note hidden" id="noteUpdated">Isian sebelumnya atas nama yang sama telah diperbarui.</p>
                 <div class="actions">
                     <button type="button" class="btn btn-ghost" onclick="isiLagi()">Isi untuk santri lain</button>
@@ -595,7 +596,7 @@
 
     function submitOrtuTolak(btn) {
         clearErr('p5');
-        if (!checked('bawa_bekal')) return showErr('p5', 'Pilih salah satu jawaban tentang bekal.', form.querySelector('input[name="bawa_bekal"]'));
+        if (!checked('bawa_bekal')) return showErr('p5', 'Pilih Persetujuan Siswa tidak mendapat MBG.', form.querySelector('input[name="bawa_bekal"]'));
         submitForm(btn, 'p5');
     }
 
