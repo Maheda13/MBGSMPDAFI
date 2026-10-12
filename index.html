@@ -2,94 +2,120 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Evaluasi MBG SMP DAFI</title>
     <style>
         :root {
-            /* Palet Warna Logo DAFI */
-            --dafi-red: #cc1219; 
+            --dafi-red: #cc1219;
             --dafi-red-hover: #a30e14;
             --dafi-grey: #666666;
             --dafi-grey-hover: #4d4d4d;
             --dafi-info-bg: #fdf2f2;
+            --star-gold: #ffca28;
+            --star-grey: #e0e0e0;
         }
 
-        /* Mencegah elemen melebar keluar dari layar HP */
         * { box-sizing: border-box; }
-
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; margin: 0; padding: 15px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        
         .container { background: white; max-width: 500px; width: 100%; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border-top: 5px solid var(--dafi-red); }
-        
         .page { display: none; }
         .page.active { display: block; animation: fadeIn 0.4s ease-in-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
+
         h2, h3 { color: var(--dafi-grey); text-align: center; margin-bottom: 20px; font-size: 1.4rem; }
-        h2 strong { color: var(--dafi-red); }
         p, li { color: #555; line-height: 1.6; font-size: 0.95rem; }
-        
-        /* Kotak Info */
+
         .info-box { background: var(--dafi-info-bg); padding: 15px; border-radius: 8px; border-left: 5px solid var(--dafi-red); margin-bottom: 20px; font-size: 0.9rem; }
         ul { padding-left: 20px; margin-top: 10px; }
-        
-        /* Galeri / Carousel */
+
+        /* Progress */
+        .progress { height: 6px; background: #eee; border-radius: 3px; overflow: hidden; margin-bottom: 22px; }
+        .progress-bar { height: 100%; width: 0; background: var(--dafi-red); transition: width 0.4s ease; }
+
         .carousel { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 10px; padding-bottom: 10px; border-radius: 8px; -webkit-overflow-scrolling: touch; }
-        .carousel img { width: 100%; flex: 0 0 100%; scroll-snap-align: start; border-radius: 8px; object-fit: cover; height: 250px; background: #ddd; cursor: pointer; transition: 0.2s; }
-        .carousel img:hover { filter: brightness(0.9); }
-        
-        /* Form Styles */
-        .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 6px; font-weight: bold; color: var(--dafi-grey); font-size: 0.95rem; }
-        input[type="text"], textarea, select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 5px; font-family: inherit; font-size: 1rem; background-color: white;}
-        input[type="text"]:focus, textarea:focus, select:focus { border-color: var(--dafi-red); outline: none; }
-        
+        .carousel img { width: 100%; flex: 0 0 100%; scroll-snap-align: start; border-radius: 8px; object-fit: cover; height: 250px; background: #ddd; cursor: pointer; }
+        .carousel-counter { text-align: center; font-size: 0.85rem; color: #888; margin: 0 0 5px; }
+
+        .form-group { margin-bottom: 18px; }
+        fieldset { border: 0; padding: 0; margin: 0 0 18px; min-width: 0; }
+        label, legend { display: block; margin-bottom: 6px; font-weight: bold; color: var(--dafi-grey); font-size: 0.95rem; padding: 0; }
+        legend { margin-bottom: 8px; }
+        input[type="text"], textarea, select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 5px; font-family: inherit; font-size: 1rem; background-color: white; }
+        input[type="text"]:focus, textarea:focus, select:focus { border-color: var(--dafi-red); outline: none; box-shadow: 0 0 0 3px rgba(204,18,25,0.15); }
+
         .radio-group label { font-weight: normal; display: flex; align-items: flex-start; gap: 10px; padding: 10px; background: #f9f9f9; border-radius: 5px; cursor: pointer; margin-bottom: 8px; border: 1px solid #eee; transition: 0.2s; }
         .radio-group label:hover { background: var(--dafi-info-bg); border-color: #f5dada; }
-        .radio-group input[type="radio"] { margin-top: 4px; }
-        
-        /* Tombol */
-        .btn-group { display: flex; justify-content: space-between; margin-top: 25px; gap: 10px;}
-        button { padding: 12px 15px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; transition: 0.3s; font-size: 1rem; }
-        .btn-primary, .btn-next { background: var(--dafi-red); color: white; }
-        .btn-primary:hover, .btn-next:hover { background: var(--dafi-red-hover); }
-        .btn-secondary { background: var(--dafi-grey); color: white; }
-        .btn-secondary:hover { background: var(--dafi-grey-hover); }
-        
-        .hidden { display: none; }
-        .logo-header { text-align: center; margin-bottom: 15px; font-size: 26px; font-weight: 900; color: var(--dafi-red); letter-spacing: 2px;}
+        .radio-group label:has(input:checked) { background: var(--dafi-info-bg); border-color: var(--dafi-red); }
+        .radio-group input[type="radio"] { margin-top: 4px; accent-color: var(--dafi-red); }
 
-        /* MODAL / POP UP ZOOM CSS */
+        /* Rating bintang (tetap bisa difokus dengan keyboard) */
+        .rating-box { background: #f9f9f9; padding: 15px; border-radius: 8px; border: 1px solid #eee; text-align: center; }
+        .stars { position: relative; display: flex; flex-direction: row-reverse; justify-content: center; gap: 5px; }
+        .stars input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+        .stars label { margin: 0; font-size: 2.8rem; line-height: 1.2; color: var(--star-grey); cursor: pointer; transition: 0.2s ease-in-out; text-shadow: 0px 2px 4px rgba(0,0,0,0.1); }
+        .stars label:hover, .stars label:hover ~ label, .stars input:checked ~ label { color: var(--star-gold); transform: scale(1.1); }
+        .stars input:focus-visible + label { outline: 2px solid var(--dafi-red); outline-offset: 2px; border-radius: 4px; }
+        .rating-label { font-size: 0.9rem; color: #888; margin-top: 5px; display: block; min-height: 1.4em; }
+        .rating-label.chosen { color: var(--dafi-red); font-weight: bold; }
+
+        .btn-group { display: flex; justify-content: space-between; margin-top: 25px; gap: 10px; }
+        button { padding: 12px 15px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; transition: 0.3s; font-size: 1rem; }
+        button:focus-visible { outline: 3px solid rgba(204,18,25,0.4); outline-offset: 2px; }
+        button:disabled { opacity: 0.6; cursor: not-allowed; }
+        .btn-primary, .btn-next { background: var(--dafi-red); color: white; }
+        .btn-primary:hover:not(:disabled), .btn-next:hover:not(:disabled) { background: var(--dafi-red-hover); }
+        .btn-secondary { background: var(--dafi-grey); color: white; }
+        .btn-secondary:hover:not(:disabled) { background: var(--dafi-grey-hover); }
+        .hidden { display: none; }
+        .logo-header { text-align: center; margin-bottom: 15px; font-size: 26px; font-weight: 900; color: var(--dafi-red); letter-spacing: 2px; }
+
+        /* Pesan error di halaman */
+        .error { background: #fff4f4; border: 1px solid #f5b5b8; color: #a30e14; padding: 10px 12px; border-radius: 5px; font-size: 0.9rem; margin-top: 15px; }
+        .error[hidden] { display: none; }
+        .note { text-align: center; font-size: 0.9rem; color: #888; }
+
+        /* Kolom jebakan bot: disembunyikan dari manusia */
+        .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+        /* Modal zoom foto */
         .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); justify-content: center; align-items: center; padding: 15px; }
         .modal-content { max-width: 100%; max-height: 85vh; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); animation: zoomIn 0.3s ease; object-fit: contain; }
         @keyframes zoomIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-        .close-modal { position: absolute; top: 15px; right: 25px; color: white; font-size: 40px; font-weight: bold; cursor: pointer; z-index: 1001; padding: 10px; }
-        
-        /* Penyesuaian HP */
+        .close-modal { position: absolute; top: 15px; right: 25px; color: white; font-size: 40px; font-weight: bold; cursor: pointer; z-index: 1001; padding: 10px; background: none; width: auto; line-height: 1; }
+
         @media (max-width: 480px) {
             .container { padding: 20px 15px; }
             .btn-group { flex-direction: column-reverse; }
             button { margin-bottom: 10px; width: 100%; }
             .btn-group button:last-child { margin-bottom: 0; }
-            .carousel img { height: 200px; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .page.active, .modal-content { animation: none; }
+            .progress-bar, .stars label { transition: none; }
         }
     </style>
 </head>
 <body>
 
-<!-- MODAL UNTUK ZOOM FOTO -->
-<div id="imageModal" class="modal" onclick="closeModal()">
-    <span class="close-modal" onclick="closeModal()">&times;</span>
-    <img class="modal-content" id="zoomedImg">
+<div id="imageModal" class="modal" role="dialog" aria-modal="true" aria-label="Foto menu diperbesar" onclick="closeModal()">
+    <button type="button" class="close-modal" aria-label="Tutup foto" onclick="closeModal()">&times;</button>
+    <img class="modal-content" id="zoomedImg" alt="Foto menu MBG diperbesar">
 </div>
 
 <div class="container">
     <div class="logo-header">DAFI</div>
-    <form id="mbgForm">
-        
+    <div class="progress" aria-hidden="true"><div class="progress-bar" id="progressBar"></div></div>
+
+    <form id="mbgForm" novalidate onsubmit="return false;">
+
+        <!-- Kolom jebakan bot -->
+        <div class="hp" aria-hidden="true">
+            <label>Jangan diisi <input type="text" name="website" id="website" tabindex="-1" autocomplete="off"></label>
+        </div>
+
         <!-- HALAMAN 1 -->
         <div class="page active" id="p1">
-            <h2>Form Evaluasi Pelaksanaan MBG</h2>
+            <h2>Form Evaluasi MBG</h2>
             <p style="text-align: center;">Suara santri dan dukungan orang tua sangat menentukan kualitas layanan gizi di SMP Islam Terpadu Darul Fikri.</p>
             <button type="button" class="btn-primary" onclick="showPage('p2')">Mulai</button>
         </div>
@@ -97,90 +123,99 @@
         <!-- HALAMAN 2 -->
         <div class="page" id="p2">
             <h2>Informasi Program</h2>
-            <p>SMP DAFI telah bekerja sama dengan SPPG Cemengkalang (Instagram <a href="https://www.instagram.com/sppg.sidoarjocemengkalang/" target="_blank" style="color: var(--dafi-red);">@sppg.sidoarjocemengkalang</a>) sejak Januari 2026.</p>
+            <p>SMP DAFI telah bekerja sama dengan SPPG Cemengkalang (Instagram <a href="https://instagram.com/cemengkalang" target="_blank" rel="noopener" style="color: var(--dafi-red);">@cemengkalang</a>) sejak Januari 2026.</p>
             <p><strong>Beberapa porsi harian MBG:</strong><br><small><i>(Ketuk foto untuk memperbesar, geser untuk melihat menu lainnya)</i></small></p>
-            
-            <div class="carousel">
-                <img src="foto-menu-1.jpg" onclick="openModal(this.src)" onerror="this.src='https://via.placeholder.com/400x250?text=Foto+Menu+1'">
-                <img src="foto-menu-2.jpg" onclick="openModal(this.src)" onerror="this.src='https://via.placeholder.com/400x250?text=Foto+Menu+2'">
-                <img src="foto-menu-3.jpg" onclick="openModal(this.src)" onerror="this.src='https://via.placeholder.com/400x250?text=Foto+Menu+3'">
-                <img src="foto-menu-4.jpg" onclick="openModal(this.src)" onerror="this.src='https://via.placeholder.com/400x250?text=Foto+Menu+4'">
-                <img src="foto-menu-5.jpg" onclick="openModal(this.src)" onerror="this.src='https://via.placeholder.com/400x250?text=Foto+Menu+5'">
-                <img src="foto-menu-6.jpg" onclick="openModal(this.src)" onerror="this.src='https://via.placeholder.com/400x250?text=Foto+Menu+6'">
-                <img src="foto-menu-7.jpg" onclick="openModal(this.src)" onerror="this.src='https://via.placeholder.com/400x250?text=Foto+Menu+7'">
-            </div>
-            
+
+            <div class="carousel" id="carousel"></div>
+            <p class="carousel-counter" id="carouselCounter" aria-live="polite"></p>
+
             <div class="btn-group">
                 <button type="button" class="btn-next" onclick="showPage('p3')">Lanjut</button>
-                <button type="button" class="btn-secondary" onclick="showPage('p1')">Kembali</button>
+                <button type="button" class="btn-secondary" onclick="goBack()">Kembali</button>
             </div>
         </div>
 
-        <!-- HALAMAN 3 (Identitas & Peran) -->
+        <!-- HALAMAN 3 -->
         <div class="page" id="p3">
             <h2>Identitas Pengisi</h2>
             <div class="form-group">
-                <label>Nama Lengkap Santri</label>
-                <input type="text" name="nama" id="nama" placeholder="Masukkan nama lengkap">
+                <label for="nama">Nama Lengkap Santri</label>
+                <input type="text" name="nama" id="nama" placeholder="Masukkan nama lengkap" maxlength="100" autocomplete="off">
             </div>
-            
-            <!-- UPDATE: Dropdown Kelas -->
+
             <div class="form-group">
-                <label>Kelas</label>
+                <label for="kelas">Kelas</label>
                 <select name="kelas" id="kelas">
                     <option value="" disabled selected>-- Pilih Kelas --</option>
-                    <option value="7A">7A</option>
-                    <option value="7B">7B</option>
-                    <option value="7C">7C</option>
-                    <option value="7D">7D</option>
-                    <option value="8A">8A</option>
-                    <option value="8B">8B</option>
-                    <option value="8C">8C</option>
-                    <option value="8D">8D</option>
-                    <option value="9A">9A</option>
-                    <option value="9B">9B</option>
-                    <option value="9C">9C</option>
+                    <option value="7A">7A</option><option value="7B">7B</option><option value="7C">7C</option><option value="7D">7D</option>
+                    <option value="8A">8A</option><option value="8B">8B</option><option value="8C">8C</option><option value="8D">8D</option>
+                    <option value="9A">9A</option><option value="9B">9B</option><option value="9C">9C</option>
                 </select>
             </div>
 
-            <div class="form-group radio-group">
-                <label><strong>Siapa yang mengisi form ini?</strong></label>
+            <fieldset class="radio-group" id="fs-peran">
+                <legend>Siapa yang mengisi form ini?</legend>
                 <label><input type="radio" name="peran" value="Santri"> Santri secara langsung</label>
                 <label><input type="radio" name="peran" value="Orang Tua"> Orang Tua / Wali Santri</label>
-            </div>
+            </fieldset>
+
+            <div class="error" id="err-p3" role="alert" hidden></div>
             <div class="btn-group">
                 <button type="button" class="btn-next" onclick="processIdentity()">Lanjut</button>
-                <button type="button" class="btn-secondary" onclick="showPage('p2')">Kembali</button>
+                <button type="button" class="btn-secondary" onclick="goBack()">Kembali</button>
             </div>
         </div>
 
         <!-- ================= JALUR 1: SANTRI ================= -->
         <div class="page" id="p4a">
             <h2>Evaluasi Santri</h2>
-            <div class="form-group radio-group">
-                <label><strong>1. Bagaimana rasa makanan MBG selama ini?</strong></label>
-                <label><input type="radio" name="rasa_siswa" value="Sangat Enak"> Sangat Enak</label>
-                <label><input type="radio" name="rasa_siswa" value="Biasa Saja"> Biasa Saja</label>
-                <label><input type="radio" name="rasa_siswa" value="Kurang Enak"> Kurang Enak</label>
-            </div>
-            <div class="form-group radio-group">
-                <label><strong>2. Apakah porsi makanannya cukup?</strong></label>
+
+            <fieldset id="fs-rating">
+                <legend>1. Bagaimana rasa &amp; kualitas makanan MBG sejauh ini?</legend>
+                <div class="rating-box">
+                    <div class="stars">
+                        <!-- Urutan terbalik karena memakai flex-direction: row-reverse -->
+                        <input type="radio" name="rating_siswa" id="star5" value="5">
+                        <label for="star5" title="Sangat Enak" aria-label="5 bintang, sangat enak">★</label>
+                        <input type="radio" name="rating_siswa" id="star4" value="4">
+                        <label for="star4" title="Enak" aria-label="4 bintang, enak">★</label>
+                        <input type="radio" name="rating_siswa" id="star3" value="3">
+                        <label for="star3" title="Biasa Saja" aria-label="3 bintang, biasa saja">★</label>
+                        <input type="radio" name="rating_siswa" id="star2" value="2">
+                        <label for="star2" title="Kurang Enak" aria-label="2 bintang, kurang enak">★</label>
+                        <input type="radio" name="rating_siswa" id="star1" value="1">
+                        <label for="star1" title="Tidak Enak" aria-label="1 bintang, tidak enak">★</label>
+                    </div>
+                    <span class="rating-label" id="ratingText" aria-live="polite">(Ketuk bintang untuk menilai)</span>
+                </div>
+            </fieldset>
+
+            <fieldset class="radio-group" id="fs-porsi">
+                <legend>2. Apakah porsi makanannya cukup?</legend>
                 <label><input type="radio" name="porsi_siswa" value="Kurang"> Kurang</label>
                 <label><input type="radio" name="porsi_siswa" value="Pas"> Pas</label>
                 <label><input type="radio" name="porsi_siswa" value="Terlalu Banyak"> Terlalu Banyak</label>
+            </fieldset>
+
+            <div class="form-group">
+                <label for="masukan_siswa">3. Ada masukan atau request menu tertentu? (Opsional)</label>
+                <textarea name="masukan_siswa" id="masukan_siswa" rows="2" maxlength="1000" placeholder="Tulis masukan, kritik, atau menu favoritmu di sini..."></textarea>
             </div>
-            <div class="form-group radio-group">
-                <label><strong>3. Apakah kamu ingin terus makan MBG di sekolah?</strong></label>
+
+            <fieldset class="radio-group" id="fs-lanjut">
+                <legend>4. Apakah kamu ingin terus makan MBG di sekolah?</legend>
                 <label><input type="radio" name="lanjut_siswa" value="Ya" onchange="toggleAlasanSiswa()"> Ya, saya ingin</label>
                 <label><input type="radio" name="lanjut_siswa" value="Tidak" onchange="toggleAlasanSiswa()"> Tidak ingin</label>
-            </div>
+            </fieldset>
             <div class="form-group hidden" id="box_alasan_siswa">
-                <label>Kenapa kamu tidak ingin? (Ceritakan alasannya)</label>
-                <textarea name="alasan_siswa" rows="2"></textarea>
+                <label for="alasan_siswa">Kenapa kamu tidak ingin? (Ceritakan alasannya)</label>
+                <textarea name="alasan_siswa" id="alasan_siswa" rows="2" maxlength="1000"></textarea>
             </div>
+
+            <div class="error" id="err-p4a" role="alert" hidden></div>
             <div class="btn-group">
-                <button type="button" class="btn-primary" onclick="submitForm()">Kirim Evaluasi</button>
-                <button type="button" class="btn-secondary" onclick="showPage('p3')">Kembali</button>
+                <button type="button" class="btn-primary" data-label="Kirim Evaluasi" onclick="submitSiswa(this)">Kirim Evaluasi</button>
+                <button type="button" class="btn-secondary" onclick="goBack()">Kembali</button>
             </div>
         </div>
 
@@ -190,54 +225,58 @@
             <div class="info-box">
                 Sebagai informasi bagi Bapak/Ibu, MBG di SMP DAFI memiliki penyesuaian khusus:
                 <ul>
-                    <li><strong>Pengganti Nasi:</strong> Menu Nasi pada MBG diganti dengan sumber karbohidrat lain seperti kentang, roti, dan lontong.</li>
-                    <li><strong>Makan Siang Utama:</strong> Santri tetap mendapatkan menu makan siang utama dari Koperasi/Kantin.</li>
-                    <li><strong>Fasilitas Puasa:</strong> Bagi santri yang berpuasa, beberapa menu MBG dapat disimpan untuk berbuka puasa dengan pantauan Wali Kelas.</li>
+                    <li><strong>Pengganti Nasi:</strong> Menu Nasi pada MBG diganti dengan kentang, roti, dan lontong.</li>
+                    <li><strong>Makan Siang Utama:</strong> Santri tetap mendapat makan siang utama dari Kantin.</li>
+                    <li><strong>Fasilitas Puasa:</strong> Bagi santri berpuasa, menu MBG dapat disimpan untuk berbuka puasa.</li>
                 </ul>
             </div>
             <div class="btn-group">
                 <button type="button" class="btn-next" onclick="showPage('p4b2')">Lanjut</button>
-                <button type="button" class="btn-secondary" onclick="showPage('p3')">Kembali</button>
+                <button type="button" class="btn-secondary" onclick="goBack()">Kembali</button>
             </div>
         </div>
 
         <div class="page" id="p4b2">
             <h2>Persetujuan Orang Tua</h2>
             <div class="form-group">
-                <label>Catatan / Keluhan dari ananda selama ini (Opsional):</label>
-                <textarea name="keluhan_ortu" rows="3" placeholder="Tuliskan masukan Bapak/Ibu di sini..."></textarea>
+                <label for="keluhan_ortu">Catatan / Keluhan dari ananda selama ini (Opsional):</label>
+                <textarea name="keluhan_ortu" id="keluhan_ortu" rows="3" maxlength="1000" placeholder="Tuliskan masukan Bapak/Ibu di sini..."></textarea>
             </div>
-            <div class="form-group radio-group">
-                <label><strong>Apakah Bapak/Ibu mengizinkan ananda untuk terus mengikuti program MBG ini?</strong></label>
+            <fieldset class="radio-group" id="fs-izin">
+                <legend>Apakah Bapak/Ibu mengizinkan ananda terus mengikuti program MBG ini?</legend>
                 <label><input type="radio" name="izin_ortu" value="Mengizinkan"> Ya, Mengizinkan (Setuju)</label>
                 <label><input type="radio" name="izin_ortu" value="Tidak Mengizinkan"> Tidak Mengizinkan (Menolak)</label>
-            </div>
+            </fieldset>
+            <div class="error" id="err-p4b2" role="alert" hidden></div>
             <div class="btn-group">
-                <button type="button" class="btn-next" onclick="processIzinOrtu()">Lanjut</button>
-                <button type="button" class="btn-secondary" onclick="showPage('p4b1')">Kembali</button>
+                <button type="button" class="btn-next" data-label="Lanjut" onclick="processIzinOrtu(this)">Lanjut</button>
+                <button type="button" class="btn-secondary" onclick="goBack()">Kembali</button>
             </div>
         </div>
 
         <div class="page" id="p5">
             <h2>Konfirmasi Lanjutan</h2>
-            <div class="form-group radio-group">
-                <label><strong>Jika menolak program ini, apakah Bapak/Ibu bersedia jika HANYA ananda yang tidak mendapatkan fasilitas MBG (wajib bawa bekal sendiri)?</strong></label>
+            <fieldset class="radio-group" id="fs-bekal">
+                <legend>Jika menolak, apakah Bapak/Ibu bersedia jika HANYA ananda yang tidak mendapat fasilitas MBG (membawa bekal)?</legend>
                 <label><input type="radio" name="bawa_bekal" value="Ya"> Ya, bersedia bawakan bekal mandiri</label>
                 <label><input type="radio" name="bawa_bekal" value="Tidak"> Tidak bersedia</label>
-            </div>
+            </fieldset>
             <div class="form-group">
-                <label>Mohon tuliskan alasan atau usulan solusi Bapak/Ibu:</label>
-                <textarea name="alasan_ortu" rows="3"></textarea>
+                <label for="alasan_ortu">Mohon tuliskan alasan atau usulan solusi Bapak/Ibu:</label>
+                <textarea name="alasan_ortu" id="alasan_ortu" rows="3" maxlength="1000"></textarea>
             </div>
+            <div class="error" id="err-p5" role="alert" hidden></div>
             <div class="btn-group">
-                <button type="button" class="btn-primary" onclick="submitForm()">Kirim Evaluasi</button>
-                <button type="button" class="btn-secondary" onclick="showPage('p4b2')">Kembali</button>
+                <button type="button" class="btn-primary" data-label="Kirim Evaluasi" onclick="submitOrtuTolak(this)">Kirim Evaluasi</button>
+                <button type="button" class="btn-secondary" onclick="goBack()">Kembali</button>
             </div>
         </div>
 
         <div class="page" id="p6">
             <h2 style="color: var(--dafi-red);">Terima Kasih!</h2>
             <p style="text-align: center;">Data evaluasi telah berhasil disimpan. Masukan Anda sangat berharga untuk perbaikan layanan di SMP DAFI.</p>
+            <p class="note hidden" id="noteUpdated">Isian sebelumnya atas nama yang sama telah diperbarui.</p>
+            <button type="button" class="btn-secondary" style="margin-top: 15px;" onclick="isiLagi()">Isi untuk santri lain</button>
         </div>
 
     </form>
@@ -245,89 +284,214 @@
 
 <script>
     // GANTI DENGAN URL WEB APP GAS ANDA!
-    const GAS_URL = "URL_APPS_SCRIPT_ANDA_DISINI";
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbwWkdlkduEl2Qy5XH_DdDJZXxsY-XjVbxXiAcYqWBqkZkCGuacEN0xbNGZwkjAXXrAlAg/exec";
 
-    function openModal(imgSrc) {
-        const modal = document.getElementById("imageModal");
-        const modalImg = document.getElementById("zoomedImg");
-        modal.style.display = "flex";
-        modalImg.src = imgSrc;
+    const TOTAL_FOTO = 7;
+    const PROGRESS = { p1: 0, p2: 15, p3: 35, p4a: 75, p4b1: 55, p4b2: 80, p5: 92, p6: 100 };
+    const RATING_TEXT = { 5: "Sangat Enak", 4: "Enak", 3: "Biasa Saja", 2: "Kurang Enak", 1: "Tidak Enak" };
+
+    const form = document.getElementById('mbgForm');
+    let currentPage = 'p1';
+    let sending = false;
+
+    /* ---------- Foto menu ---------- */
+    function placeholder(i) {
+        const svg = "<svg xmlns='http://www.w3.org/2000/svg' width='400' height='250'><rect width='100%' height='100%' fill='#ddd'/>" +
+            "<text x='50%' y='50%' font-family='sans-serif' font-size='20' fill='#888' text-anchor='middle' dominant-baseline='middle'>Foto Menu " + i + "</text></svg>";
+        return 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
     }
 
+    const carousel = document.getElementById('carousel');
+    const counter = document.getElementById('carouselCounter');
+    for (let i = 1; i <= TOTAL_FOTO; i++) {
+        const img = document.createElement('img');
+        img.src = 'foto-menu-' + i + '.jpg';
+        img.alt = 'Contoh menu MBG ' + i;
+        img.loading = 'lazy';
+        img.addEventListener('error', () => { img.src = placeholder(i); }, { once: true });
+        img.addEventListener('click', () => openModal(img.src));
+        carousel.appendChild(img);
+    }
+    function updateCounter() {
+        const idx = Math.round(carousel.scrollLeft / (carousel.clientWidth + 10)) + 1;
+        counter.textContent = 'Foto ' + Math.min(Math.max(idx, 1), TOTAL_FOTO) + ' dari ' + TOTAL_FOTO;
+    }
+    carousel.addEventListener('scroll', updateCounter, { passive: true });
+    updateCounter();
+
+    function openModal(src) {
+        document.getElementById('zoomedImg').src = src;
+        document.getElementById('imageModal').style.display = 'flex';
+    }
     function closeModal() {
-        document.getElementById("imageModal").style.display = "none";
+        document.getElementById('imageModal').style.display = 'none';
     }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
 
-    function showPage(pageId) {
+    /* ---------- Navigasi (tombol Back HP kembali ke langkah sebelumnya) ---------- */
+    function render(id) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-        document.getElementById(pageId).classList.add('active');
-        window.scrollTo(0, 0); 
+        document.getElementById(id).classList.add('active');
+        document.getElementById('progressBar').style.width = PROGRESS[id] + '%';
+        currentPage = id;
+        window.scrollTo(0, 0);
+    }
+    function showPage(id) {
+        render(id);
+        try { history.pushState({ page: id }, ''); } catch (e) { /* abaikan jika browser menolak */ }
+    }
+    function goBack() {
+        if (history.state && history.state.page && history.state.page !== 'p1') history.back();
+        else render('p1');
+    }
+    window.addEventListener('popstate', e => render((e.state && e.state.page) || 'p1'));
+    try { history.replaceState({ page: 'p1' }, ''); } catch (e) {}
+
+    /* ---------- Pesan error ---------- */
+    function showErr(pageId, msg, focusEl) {
+        const box = document.getElementById('err-' + pageId);
+        if (!box) { alert(msg); return; }
+        box.textContent = msg;
+        box.hidden = false;
+        if (focusEl) focusEl.focus({ preventScroll: false });
+    }
+    function clearErr(pageId) {
+        const box = document.getElementById('err-' + pageId);
+        if (box) box.hidden = true;
+    }
+    function checked(name) {
+        return form.querySelector('input[name="' + name + '"]:checked');
     }
 
-    // UPDATE: Penambahan validasi untuk pilihan Kelas
+    /* ---------- Rating ---------- */
+    document.querySelectorAll('input[name="rating_siswa"]').forEach(r => {
+        r.addEventListener('change', () => {
+            const t = document.getElementById('ratingText');
+            t.textContent = r.value + ' bintang · ' + RATING_TEXT[r.value];
+            t.classList.add('chosen');
+        });
+    });
+
+    /* ---------- Alur ---------- */
     function processIdentity() {
-        let nama = document.getElementById('nama').value;
-        let kelas = document.getElementById('kelas').value;
-        let peran = document.querySelector('input[name="peran"]:checked');
+        clearErr('p3');
+        const nama = document.getElementById('nama');
+        const kelas = document.getElementById('kelas');
+        const peran = checked('peran');
 
-        if(nama.trim() === "" || kelas === "" || !peran) {
-            alert("Harap lengkapi Nama Santri, Kelas, dan Pilihan Pengisi form.");
-            return;
-        }
+        if (nama.value.trim().length < 2) return showErr('p3', 'Nama santri belum diisi.', nama);
+        if (!kelas.value) return showErr('p3', 'Kelas belum dipilih.', kelas);
+        if (!peran) return showErr('p3', 'Pilih siapa yang mengisi form ini.', form.querySelector('input[name="peran"]'));
 
-        if (peran.value === "Santri") {
-            showPage('p4a');
-        } else {
-            showPage('p4b1');
-        }
+        showPage(peran.value === 'Santri' ? 'p4a' : 'p4b1');
     }
 
     function toggleAlasanSiswa() {
-        let lanjut = document.querySelector('input[name="lanjut_siswa"]:checked').value;
-        let boxAlasan = document.getElementById('box_alasan_siswa');
-        if(lanjut === "Tidak") {
-            boxAlasan.classList.remove('hidden');
+        const lanjut = checked('lanjut_siswa');
+        const box = document.getElementById('box_alasan_siswa');
+        if (lanjut && lanjut.value === 'Tidak') {
+            box.classList.remove('hidden');
         } else {
-            boxAlasan.classList.add('hidden');
-            document.querySelector('textarea[name="alasan_siswa"]').value = "";
+            box.classList.add('hidden');
+            document.getElementById('alasan_siswa').value = '';
         }
     }
 
-    function processIzinOrtu() {
-        let izin = document.querySelector('input[name="izin_ortu"]:checked');
-        if(!izin) {
-            alert("Harap pilih salah satu opsi persetujuan.");
-            return;
-        }
-
-        if(izin.value === "Tidak Mengizinkan") {
-            showPage('p5'); 
-        } else {
-            submitForm(); 
-        }
+    function submitSiswa(btn) {
+        clearErr('p4a');
+        if (!checked('rating_siswa')) return showErr('p4a', 'Beri penilaian bintang dulu (langkah 1).', form.querySelector('input[name="rating_siswa"]'));
+        if (!checked('porsi_siswa'))  return showErr('p4a', 'Pilih salah satu jawaban porsi (langkah 2).', form.querySelector('input[name="porsi_siswa"]'));
+        if (!checked('lanjut_siswa')) return showErr('p4a', 'Pilih apakah ingin lanjut MBG (langkah 4).', form.querySelector('input[name="lanjut_siswa"]'));
+        submitForm(btn, 'p4a');
     }
 
-    function submitForm() {
-        const btns = document.querySelectorAll('.btn-primary');
-        btns.forEach(btn => { btn.innerText = 'Mengirim...'; btn.disabled = true; });
+    function processIzinOrtu(btn) {
+        clearErr('p4b2');
+        const izin = checked('izin_ortu');
+        if (!izin) return showErr('p4b2', 'Pilih salah satu opsi persetujuan.', form.querySelector('input[name="izin_ortu"]'));
+        if (izin.value === 'Tidak Mengizinkan') showPage('p5');
+        else submitForm(btn, 'p4b2');
+    }
 
-        const form = document.getElementById('mbgForm');
-        const formData = new FormData(form);
+    function submitOrtuTolak(btn) {
+        clearErr('p5');
+        if (!checked('bawa_bekal')) return showErr('p5', 'Pilih salah satu jawaban tentang bekal.', form.querySelector('input[name="bawa_bekal"]'));
+        submitForm(btn, 'p5');
+    }
 
-        fetch(GAS_URL, { method: 'POST', body: formData })
-        .then(response => response.json())
-        .then(data => {
-            if (data.status === "sukses") {
+    /* ---------- Kirim ---------- */
+    // Hanya mengirim isian sesuai jalur yang dipilih, supaya sisa isian jalur lain tidak ikut terkirim.
+    function buildPayload() {
+        const v = n => (form.elements[n] && form.elements[n].value) || '';
+        const peran = v('peran');
+        const p = { nama: v('nama').trim(), kelas: v('kelas'), peran: peran, website: v('website') };
+
+        if (peran === 'Santri') {
+            p.rating_siswa = v('rating_siswa');
+            p.porsi_siswa = v('porsi_siswa');
+            p.lanjut_siswa = v('lanjut_siswa');
+            p.masukan_siswa = v('masukan_siswa').trim();
+            if (p.lanjut_siswa === 'Tidak') p.alasan_siswa = v('alasan_siswa').trim();
+        } else {
+            p.izin_ortu = v('izin_ortu');
+            p.keluhan_ortu = v('keluhan_ortu').trim();
+            if (p.izin_ortu === 'Tidak Mengizinkan') {
+                p.bawa_bekal = v('bawa_bekal');
+                p.alasan_ortu = v('alasan_ortu').trim();
+            }
+        }
+        return p;
+    }
+
+    function setBusy(btn, busy) {
+        btn.disabled = busy;
+        btn.textContent = busy ? 'Mengirim...' : btn.dataset.label;
+    }
+
+    async function submitForm(btn, pageId) {
+        if (sending) return;
+        if (!GAS_URL || GAS_URL.indexOf('ANDA_DISINI') !== -1) {
+            return showErr(pageId, 'URL Apps Script belum diatur. Hubungi admin form.');
+        }
+
+        sending = true;
+        setBusy(btn, true);
+        const ctrl = new AbortController();
+        const timer = setTimeout(() => ctrl.abort(), 25000);
+
+        try {
+            const res = await fetch(GAS_URL, {
+                method: 'POST',
+                body: new URLSearchParams(buildPayload()),
+                signal: ctrl.signal
+            });
+            const data = await res.json();
+
+            if (data.status === 'sukses') {
+                document.getElementById('noteUpdated').classList.toggle('hidden', data.mode !== 'diperbarui');
                 showPage('p6');
             } else {
-                alert('Terjadi kesalahan, coba lagi.');
-                btns.forEach(btn => { btn.innerText = 'Kirim Evaluasi'; btn.disabled = false; });
+                showErr(pageId, data.error || 'Terjadi kesalahan, coba lagi.');
             }
-        })
-        .catch(error => {
-            alert('Gagal mengirim data. Cek koneksi internet Anda.');
-            btns.forEach(btn => { btn.innerText = 'Kirim Evaluasi'; btn.disabled = false; });
-        });
+        } catch (err) {
+            showErr(pageId, err.name === 'AbortError'
+                ? 'Pengiriman terlalu lama. Periksa sinyal, lalu tekan kirim lagi. Isian Anda tidak hilang.'
+                : 'Gagal mengirim data. Periksa koneksi internet, lalu tekan kirim lagi. Isian Anda tidak hilang.');
+        } finally {
+            clearTimeout(timer);
+            sending = false;
+            setBusy(btn, false);
+        }
+    }
+
+    function isiLagi() {
+        form.reset();
+        document.getElementById('box_alasan_siswa').classList.add('hidden');
+        const t = document.getElementById('ratingText');
+        t.textContent = '(Ketuk bintang untuk menilai)';
+        t.classList.remove('chosen');
+        ['p3', 'p4a', 'p4b2', 'p5'].forEach(clearErr);
+        showPage('p3');
     }
 </script>
 </body>
