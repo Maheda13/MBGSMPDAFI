@@ -2,58 +2,117 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Evaluasi MBG SMP DAFI</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .container { background: white; max-width: 500px; width: 100%; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        :root {
+            /* Palet Warna Logo DAFI */
+            --dafi-red: #cc1219; 
+            --dafi-red-hover: #a30e14;
+            --dafi-grey: #666666;
+            --dafi-grey-hover: #4d4d4d;
+            --dafi-info-bg: #fdf2f2;
+        }
+
+        /* Mencegah elemen melebar keluar dari layar HP */
+        * { box-sizing: border-box; }
+
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #f4f7f6; margin: 0; padding: 15px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        
+        .container { background: white; max-width: 500px; width: 100%; padding: 30px; border-radius: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border-top: 5px solid var(--dafi-red); }
+        
         .page { display: none; }
         .page.active { display: block; animation: fadeIn 0.4s ease-in-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        h2, h3 { color: #2c3e50; text-align: center; margin-bottom: 20px; }
-        p, li { color: #555; line-height: 1.6; }
-        .info-box { background: #e8f4f8; padding: 15px; border-radius: 8px; border-left: 5px solid #3498db; margin-bottom: 20px; }
+        
+        h2, h3 { color: var(--dafi-grey); text-align: center; margin-bottom: 20px; font-size: 1.4rem; }
+        h2 strong { color: var(--dafi-red); }
+        p, li { color: #555; line-height: 1.6; font-size: 0.95rem; }
+        
+        /* Kotak Info */
+        .info-box { background: var(--dafi-info-bg); padding: 15px; border-radius: 8px; border-left: 5px solid var(--dafi-red); margin-bottom: 20px; font-size: 0.9rem; }
         ul { padding-left: 20px; margin-top: 10px; }
-        .carousel { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 10px; padding-bottom: 10px; border-radius: 8px; }
-        .carousel img { width: 100%; flex: 0 0 100%; scroll-snap-align: start; border-radius: 8px; object-fit: cover; height: 250px; background: #ddd; }
+        
+        /* Galeri / Carousel */
+        .carousel { display: flex; overflow-x: auto; scroll-snap-type: x mandatory; gap: 10px; padding-bottom: 10px; border-radius: 8px; -webkit-overflow-scrolling: touch; }
+        .carousel img { width: 100%; flex: 0 0 100%; scroll-snap-align: start; border-radius: 8px; object-fit: cover; height: 250px; background: #ddd; cursor: pointer; transition: 0.2s; }
+        .carousel img:hover { filter: brightness(0.9); }
+        
+        /* Form Styles */
         .form-group { margin-bottom: 15px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; color: #333; }
-        input[type="text"], textarea, select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; box-sizing: border-box; }
-        .radio-group label { font-weight: normal; display: flex; align-items: center; gap: 8px; padding: 8px; background: #f9f9f9; border-radius: 5px; cursor: pointer; margin-bottom: 5px; border: 1px solid #eee; }
-        .radio-group label:hover { background: #f1f1f1; }
-        .btn-group { display: flex; justify-content: space-between; margin-top: 20px; gap: 10px;}
-        button { padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; transition: 0.3s; }
-        .btn-primary { background: #27ae60; color: white; }
-        .btn-primary:hover { background: #219150; }
-        .btn-secondary { background: #95a5a6; color: white; }
-        .btn-next { background: #3498db; color: white; }
+        label { display: block; margin-bottom: 6px; font-weight: bold; color: var(--dafi-grey); font-size: 0.95rem; }
+        input[type="text"], textarea, select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 5px; font-family: inherit; font-size: 1rem; background-color: white;}
+        input[type="text"]:focus, textarea:focus, select:focus { border-color: var(--dafi-red); outline: none; }
+        
+        .radio-group label { font-weight: normal; display: flex; align-items: flex-start; gap: 10px; padding: 10px; background: #f9f9f9; border-radius: 5px; cursor: pointer; margin-bottom: 8px; border: 1px solid #eee; transition: 0.2s; }
+        .radio-group label:hover { background: var(--dafi-info-bg); border-color: #f5dada; }
+        .radio-group input[type="radio"] { margin-top: 4px; }
+        
+        /* Tombol */
+        .btn-group { display: flex; justify-content: space-between; margin-top: 25px; gap: 10px;}
+        button { padding: 12px 15px; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; width: 100%; transition: 0.3s; font-size: 1rem; }
+        .btn-primary, .btn-next { background: var(--dafi-red); color: white; }
+        .btn-primary:hover, .btn-next:hover { background: var(--dafi-red-hover); }
+        .btn-secondary { background: var(--dafi-grey); color: white; }
+        .btn-secondary:hover { background: var(--dafi-grey-hover); }
+        
         .hidden { display: none; }
+        .logo-header { text-align: center; margin-bottom: 15px; font-size: 26px; font-weight: 900; color: var(--dafi-red); letter-spacing: 2px;}
+
+        /* MODAL / POP UP ZOOM CSS */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); justify-content: center; align-items: center; padding: 15px; }
+        .modal-content { max-width: 100%; max-height: 85vh; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.5); animation: zoomIn 0.3s ease; object-fit: contain; }
+        @keyframes zoomIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+        .close-modal { position: absolute; top: 15px; right: 25px; color: white; font-size: 40px; font-weight: bold; cursor: pointer; z-index: 1001; padding: 10px; }
+        
+        /* Penyesuaian HP */
+        @media (max-width: 480px) {
+            .container { padding: 20px 15px; }
+            .btn-group { flex-direction: column-reverse; }
+            button { margin-bottom: 10px; width: 100%; }
+            .btn-group button:last-child { margin-bottom: 0; }
+            .carousel img { height: 200px; }
+        }
     </style>
 </head>
 <body>
 
+<!-- MODAL UNTUK ZOOM FOTO -->
+<div id="imageModal" class="modal" onclick="closeModal()">
+    <span class="close-modal" onclick="closeModal()">&times;</span>
+    <img class="modal-content" id="zoomedImg">
+</div>
+
 <div class="container">
+    <div class="logo-header">DAFI</div>
     <form id="mbgForm">
         
         <!-- HALAMAN 1 -->
         <div class="page active" id="p1">
-            <h2>Form Evaluasi Pelaksanaan MBG di SMP DAFI</h2>
-            <p style="text-align: center;">Suara santri dan dukungan orang tua sangat menentukan kualitas layanan gizi di sekolah.</p>
+            <h2>Form Evaluasi Pelaksanaan MBG</h2>
+            <p style="text-align: center;">Suara santri dan dukungan orang tua sangat menentukan kualitas layanan gizi di SMP Islam Terpadu Darul Fikri.</p>
             <button type="button" class="btn-primary" onclick="showPage('p2')">Mulai</button>
         </div>
 
         <!-- HALAMAN 2 -->
         <div class="page" id="p2">
             <h2>Informasi Program</h2>
-            <p>SMP DAFI telah bekerja sama dengan SPPG Cemengkalang (Instagram <a href="https://instagram.com/cemengkalang" target="_blank">@cemengkalang</a>) sejak Januari 2026.</p>
-            <p><strong>Beberapa porsi harian MBG:</strong></p>
+            <p>SMP DAFI telah bekerja sama dengan SPPG Cemengkalang (Instagram <a href="https://www.instagram.com/sppg.sidoarjocemengkalang/" target="_blank" style="color: var(--dafi-red);">@sppg.sidoarjocemengkalang</a>) sejak Januari 2026.</p>
+            <p><strong>Beberapa porsi harian MBG:</strong><br><small><i>(Ketuk foto untuk memperbesar, geser untuk melihat menu lainnya)</i></small></p>
+            
             <div class="carousel">
-                <img src="foto-menu-1.jpg" onerror="this.src='https://via.placeholder.com/400x250?text=Foto+Menu+1'">
-                <img src="foto-menu-2.jpg" onerror="this.src='https://via.placeholder.com/400x250?text=Foto+Menu+2'">
+                <img src="foto-menu-1.jpg" onclick="openModal(this.src)" onerror="this.src='https://via.placeholder.com/400x250?text=Foto+Menu+1'">
+                <img src="foto-menu-2.jpg" onclick="openModal(this.src)" onerror="this.src='https://via.placeholder.com/400x250?text=Foto+Menu+2'">
+                <img src="foto-menu-3.jpg" onclick="openModal(this.src)" onerror="this.src='https://via.placeholder.com/400x250?text=Foto+Menu+3'">
+                <img src="foto-menu-4.jpg" onclick="openModal(this.src)" onerror="this.src='https://via.placeholder.com/400x250?text=Foto+Menu+4'">
+                <img src="foto-menu-5.jpg" onclick="openModal(this.src)" onerror="this.src='https://via.placeholder.com/400x250?text=Foto+Menu+5'">
+                <img src="foto-menu-6.jpg" onclick="openModal(this.src)" onerror="this.src='https://via.placeholder.com/400x250?text=Foto+Menu+6'">
+                <img src="foto-menu-7.jpg" onclick="openModal(this.src)" onerror="this.src='https://via.placeholder.com/400x250?text=Foto+Menu+7'">
             </div>
+            
             <div class="btn-group">
-                <button type="button" class="btn-secondary" onclick="showPage('p1')">Kembali</button>
                 <button type="button" class="btn-next" onclick="showPage('p3')">Lanjut</button>
+                <button type="button" class="btn-secondary" onclick="showPage('p1')">Kembali</button>
             </div>
         </div>
 
@@ -62,20 +121,36 @@
             <h2>Identitas Pengisi</h2>
             <div class="form-group">
                 <label>Nama Lengkap Santri</label>
-                <input type="text" name="nama" id="nama">
+                <input type="text" name="nama" id="nama" placeholder="Masukkan nama lengkap">
             </div>
+            
+            <!-- UPDATE: Dropdown Kelas -->
             <div class="form-group">
                 <label>Kelas</label>
-                <input type="text" name="kelas" id="kelas">
+                <select name="kelas" id="kelas">
+                    <option value="" disabled selected>-- Pilih Kelas --</option>
+                    <option value="7A">7A</option>
+                    <option value="7B">7B</option>
+                    <option value="7C">7C</option>
+                    <option value="7D">7D</option>
+                    <option value="8A">8A</option>
+                    <option value="8B">8B</option>
+                    <option value="8C">8C</option>
+                    <option value="8D">8D</option>
+                    <option value="9A">9A</option>
+                    <option value="9B">9B</option>
+                    <option value="9C">9C</option>
+                </select>
             </div>
+
             <div class="form-group radio-group">
                 <label><strong>Siapa yang mengisi form ini?</strong></label>
                 <label><input type="radio" name="peran" value="Santri"> Santri secara langsung</label>
                 <label><input type="radio" name="peran" value="Orang Tua"> Orang Tua / Wali Santri</label>
             </div>
             <div class="btn-group">
-                <button type="button" class="btn-secondary" onclick="showPage('p2')">Kembali</button>
                 <button type="button" class="btn-next" onclick="processIdentity()">Lanjut</button>
+                <button type="button" class="btn-secondary" onclick="showPage('p2')">Kembali</button>
             </div>
         </div>
 
@@ -104,35 +179,33 @@
                 <textarea name="alasan_siswa" rows="2"></textarea>
             </div>
             <div class="btn-group">
-                <button type="button" class="btn-secondary" onclick="showPage('p3')">Kembali</button>
                 <button type="button" class="btn-primary" onclick="submitForm()">Kirim Evaluasi</button>
+                <button type="button" class="btn-secondary" onclick="showPage('p3')">Kembali</button>
             </div>
         </div>
 
         <!-- ================= JALUR 2: ORANG TUA ================= -->
-        <!-- HALAMAN 4B-1: Info Keunikan MBG -->
         <div class="page" id="p4b1">
             <h2>Konteks MBG di SMP DAFI</h2>
             <div class="info-box">
-                Sebagai informasi bagi Bapak/Ibu, MBG di SMP DAFI memiliki 3 penyesuaian khusus dibandingkan MBG pada umumnya:
+                Sebagai informasi bagi Bapak/Ibu, MBG di SMP DAFI memiliki penyesuaian khusus:
                 <ul>
                     <li><strong>Pengganti Nasi:</strong> Menu Nasi pada MBG diganti dengan sumber karbohidrat lain seperti kentang, roti, dan lontong.</li>
-                    <li><strong>Makan Siang Utama Tetap:</strong> Santri tetap mendapatkan menu makan siang utama dari Koperasi/Kantin.</li>
-                    <li><strong>Fasilitas Puasa:</strong> Bagi santri yang berpuasa, beberapa menu MBG dapat disimpan untuk berbuka puasa dengan pantauan langsung dari Wali Kelas.</li>
+                    <li><strong>Makan Siang Utama:</strong> Santri tetap mendapatkan menu makan siang utama dari Koperasi/Kantin.</li>
+                    <li><strong>Fasilitas Puasa:</strong> Bagi santri yang berpuasa, beberapa menu MBG dapat disimpan untuk berbuka puasa dengan pantauan Wali Kelas.</li>
                 </ul>
             </div>
             <div class="btn-group">
-                <button type="button" class="btn-secondary" onclick="showPage('p3')">Kembali</button>
                 <button type="button" class="btn-next" onclick="showPage('p4b2')">Lanjut</button>
+                <button type="button" class="btn-secondary" onclick="showPage('p3')">Kembali</button>
             </div>
         </div>
 
-        <!-- HALAMAN 4B-2: Persetujuan Orang Tua -->
         <div class="page" id="p4b2">
             <h2>Persetujuan Orang Tua</h2>
             <div class="form-group">
                 <label>Catatan / Keluhan dari ananda selama ini (Opsional):</label>
-                <textarea name="keluhan_ortu" rows="3"></textarea>
+                <textarea name="keluhan_ortu" rows="3" placeholder="Tuliskan masukan Bapak/Ibu di sini..."></textarea>
             </div>
             <div class="form-group radio-group">
                 <label><strong>Apakah Bapak/Ibu mengizinkan ananda untuk terus mengikuti program MBG ini?</strong></label>
@@ -140,12 +213,11 @@
                 <label><input type="radio" name="izin_ortu" value="Tidak Mengizinkan"> Tidak Mengizinkan (Menolak)</label>
             </div>
             <div class="btn-group">
-                <button type="button" class="btn-secondary" onclick="showPage('p4b1')">Kembali</button>
                 <button type="button" class="btn-next" onclick="processIzinOrtu()">Lanjut</button>
+                <button type="button" class="btn-secondary" onclick="showPage('p4b1')">Kembali</button>
             </div>
         </div>
 
-        <!-- HALAMAN 5: Konfirmasi Penolakan Orang Tua -->
         <div class="page" id="p5">
             <h2>Konfirmasi Lanjutan</h2>
             <div class="form-group radio-group">
@@ -158,14 +230,13 @@
                 <textarea name="alasan_ortu" rows="3"></textarea>
             </div>
             <div class="btn-group">
-                <button type="button" class="btn-secondary" onclick="showPage('p4b2')">Kembali</button>
                 <button type="button" class="btn-primary" onclick="submitForm()">Kirim Evaluasi</button>
+                <button type="button" class="btn-secondary" onclick="showPage('p4b2')">Kembali</button>
             </div>
         </div>
 
-        <!-- HALAMAN 6: Penutup -->
         <div class="page" id="p6">
-            <h2>Terima Kasih!</h2>
+            <h2 style="color: var(--dafi-red);">Terima Kasih!</h2>
             <p style="text-align: center;">Data evaluasi telah berhasil disimpan. Masukan Anda sangat berharga untuk perbaikan layanan di SMP DAFI.</p>
         </div>
 
@@ -174,20 +245,33 @@
 
 <script>
     // GANTI DENGAN URL WEB APP GAS ANDA!
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbyfxhVZWkX-uvRjsD8kE1KDuu40rmwGJrQXT6UOTJrXYbsYMwZiM2QstaDEg2447EzrDQ/exec";
+    const GAS_URL = "URL_APPS_SCRIPT_ANDA_DISINI";
+
+    function openModal(imgSrc) {
+        const modal = document.getElementById("imageModal");
+        const modalImg = document.getElementById("zoomedImg");
+        modal.style.display = "flex";
+        modalImg.src = imgSrc;
+    }
+
+    function closeModal() {
+        document.getElementById("imageModal").style.display = "none";
+    }
 
     function showPage(pageId) {
         document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
         document.getElementById(pageId).classList.add('active');
+        window.scrollTo(0, 0); 
     }
 
-    // Navigasi setelah Halaman 3 (Identitas)
+    // UPDATE: Penambahan validasi untuk pilihan Kelas
     function processIdentity() {
         let nama = document.getElementById('nama').value;
+        let kelas = document.getElementById('kelas').value;
         let peran = document.querySelector('input[name="peran"]:checked');
 
-        if(nama.trim() === "" || !peran) {
-            alert("Harap lengkapi Nama Santri dan Pilihan Pengisi form.");
+        if(nama.trim() === "" || kelas === "" || !peran) {
+            alert("Harap lengkapi Nama Santri, Kelas, dan Pilihan Pengisi form.");
             return;
         }
 
@@ -198,7 +282,6 @@
         }
     }
 
-    // Toggle textarea alasan santri jika pilih tidak lanjut
     function toggleAlasanSiswa() {
         let lanjut = document.querySelector('input[name="lanjut_siswa"]:checked').value;
         let boxAlasan = document.getElementById('box_alasan_siswa');
@@ -210,7 +293,6 @@
         }
     }
 
-    // Navigasi setelah Halaman 4B-2 (Izin Ortu)
     function processIzinOrtu() {
         let izin = document.querySelector('input[name="izin_ortu"]:checked');
         if(!izin) {
@@ -219,13 +301,12 @@
         }
 
         if(izin.value === "Tidak Mengizinkan") {
-            showPage('p5'); // Lanjut konfirmasi tolak
+            showPage('p5'); 
         } else {
-            submitForm(); // Langsung kirim
+            submitForm(); 
         }
     }
 
-    // Fungsi Pengiriman Data ke GAS
     function submitForm() {
         const btns = document.querySelectorAll('.btn-primary');
         btns.forEach(btn => { btn.innerText = 'Mengirim...'; btn.disabled = true; });
