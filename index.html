@@ -91,6 +91,21 @@
             background-repeat: no-repeat; background-position: right 14px center;
         }
 
+        select:disabled { background-color: #f4f5f6; color: var(--ink); -webkit-text-fill-color: var(--ink); opacity: 1; cursor: not-allowed; }
+        .field-hint { margin: 6px 0 0; font-size: 0.85rem; color: var(--muted); }
+        .field-hint[hidden] { display: none; }
+
+        /* Saran nama santri */
+        .combo { position: relative; }
+        .saran { position: absolute; left: 0; right: 0; top: calc(100% + 6px); z-index: 20; margin: 0; padding: 6px; list-style: none; max-height: 272px; overflow-y: auto; background: #fff; border: 1.5px solid var(--line); border-radius: 14px; box-shadow: 0 16px 36px -12px rgba(29,33,37,0.28); }
+        .saran[hidden] { display: none; }
+        .saran li { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 11px 12px; border-radius: 10px; font-size: 0.97rem; cursor: pointer; }
+        .saran li:hover, .saran li.on { background: var(--red-tint); }
+        .saran .kls { flex: none; padding: 2px 10px; border-radius: 999px; background: var(--red-tint); border: 1px solid var(--red-line); color: var(--red-dark); font-size: 0.8rem; font-weight: 700; }
+        .saran li:hover .kls, .saran li.on .kls { background: #fff; }
+        .saran li.info { display: block; cursor: default; color: var(--muted); font-size: 0.9rem; }
+        .saran li.info:hover { background: transparent; }
+
         /* Pilihan berbentuk kartu */
         .radio-group label {
             display: flex; align-items: center; gap: 12px; margin: 0 0 10px; padding: 14px 16px;
@@ -245,13 +260,17 @@
             <div class="page active" id="p1">
                 <h2>Selamat datang</h2>
                 <p class="lead">Suara santri dan dukungan orang tua sangat menentukan kualitas layanan gizi di SMP Islam Terpadu Darul Fikri.</p>
+                <div class="chips">
+                    <span class="chip">Diisi oleh santri</span>
+                    <span class="chip">Atau orang tua / wali</span>
+                </div>
                 <button type="button" class="btn btn-primary btn-start" onclick="showPage('p2')">Mulai</button>
             </div>
 
             <!-- HALAMAN 2 -->
             <div class="page" id="p2">
                 <h2>Informasi Program</h2>
-                <p>SMP DAFI telah bekerja sama dengan SPPG Cemengkalang (Instagram <a href="https://www.instagram.com/sppg.sidoarjocemengkalang/" target="_blank" rel="noopener">@sppg.sidoarjocemengkalang</a>) sejak Januari 2026.</p>
+                <p>SMP DAFI telah bekerja sama dengan SPPG Cemengkalang (Instagram <a href="https://instagram.com/cemengkalang" target="_blank" rel="noopener">@cemengkalang</a>) sejak Januari 2026.</p>
                 <p><strong style="color: var(--ink);">Beberapa porsi harian MBG:</strong></p>
 
                 <div class="gallery">
@@ -275,7 +294,11 @@
 
                 <div class="field">
                     <label for="nama">Nama Lengkap Santri</label>
-                    <input type="text" name="nama" id="nama" placeholder="Masukkan nama lengkap" maxlength="100" autocomplete="off">
+                    <div class="combo">
+                        <input type="text" name="nama" id="nama" placeholder="Ketik minimal 3 huruf nama santri" maxlength="100" autocomplete="off"
+                               role="combobox" aria-expanded="false" aria-controls="saran" aria-autocomplete="list">
+                        <ul class="saran" id="saran" role="listbox" aria-label="Saran nama santri" hidden></ul>
+                    </div>
                 </div>
 
                 <div class="field">
@@ -286,6 +309,7 @@
                         <option value="8A">8A</option><option value="8B">8B</option><option value="8C">8C</option><option value="8D">8D</option>
                         <option value="9A">9A</option><option value="9B">9B</option><option value="9C">9C</option>
                     </select>
+                    <p class="field-hint" id="kelasHint" hidden>Kelas terisi otomatis dari daftar santri. Salah nama? Ubah isian nama di atas.</p>
                 </div>
 
                 <fieldset class="radio-group" id="fs-peran">
@@ -414,7 +438,6 @@
                 <div class="done-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></div>
                 <h2>Terima Kasih!</h2>
                 <p>Data evaluasi telah berhasil disimpan. Masukan Anda sangat berharga untuk perbaikan layanan di SMP DAFI.</p>
-                <p>Jika terdapat pertanyaan atau membutuhkan informasi lebih lanjut, Bapak/ibu dapat langsung menghubungi Wali Kelas.</p>
                 <p class="note hidden" id="noteUpdated">Isian sebelumnya atas nama yang sama telah diperbarui.</p>
                 <div class="actions">
                     <button type="button" class="btn btn-ghost" onclick="isiLagi()">Isi untuk santri lain</button>
@@ -427,7 +450,7 @@
 
 <script>
     // GANTI DENGAN URL WEB APP GAS ANDA!
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbwWkdlkduEl2Qy5XH_DdDJZXxsY-XjVbxXiAcYqWBqkZkCGuacEN0xbNGZwkjAXXrAlAg/exec";
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbyUE6uKzJsXQPZMbhKUz7-iMyzBkX0yM_-d4Puy6A86Jl70-L_NC_whDCIdL0HARZ5JPg/exec";
 
     const TOTAL_FOTO = 7;
     const RATING_TEXT = { 5: "Sangat Enak", 4: "Enak", 3: "Biasa Saja", 2: "Kurang Enak", 1: "Tidak Enak" };
@@ -510,6 +533,7 @@
         currentPage = id;
         renderSteps(id);
         if (id === 'p2') updateGallery();
+        closeSaran();
         window.scrollTo(0, 0);
     }
     function showPage(id) {
@@ -548,6 +572,124 @@
             t.classList.add('chosen');
         });
     });
+
+    /* ---------- Saran nama santri (daftar ada di tab "Siswa" pada Google Sheet) ---------- */
+    const namaInput = document.getElementById('nama');
+    const kelasSel = document.getElementById('kelas');
+    const saranBox = document.getElementById('saran');
+    const kelasHint = document.getElementById('kelasHint');
+    let selectedSiswa = null, saranItems = [], saranIdx = -1;
+    let searchSeq = 0, searchTimer = null, searchCtrl = null;
+
+    function gasReady() { return GAS_URL && GAS_URL.indexOf('ANDA_DISINI') === -1; }
+
+    function closeSaran() {
+        saranBox.hidden = true;
+        saranIdx = -1;
+        namaInput.setAttribute('aria-expanded', 'false');
+        namaInput.removeAttribute('aria-activedescendant');
+    }
+    function openSaran() {
+        saranBox.hidden = false;
+        namaInput.setAttribute('aria-expanded', 'true');
+    }
+    function infoSaran(teks) {
+        saranBox.innerHTML = '';
+        saranItems = [];
+        const li = document.createElement('li');
+        li.className = 'info';
+        li.textContent = teks;
+        saranBox.appendChild(li);
+        openSaran();
+    }
+    function renderSaran(list) {
+        if (!list.length) {
+            infoSaran('Tidak ada yang cocok. Anda tetap bisa mengetik nama lengkap lalu memilih kelas sendiri.');
+            return;
+        }
+        saranBox.innerHTML = '';
+        saranItems = list;
+        saranIdx = -1;
+        list.forEach((s, i) => {
+            const li = document.createElement('li');
+            li.id = 'saran-' + i;
+            li.setAttribute('role', 'option');
+            const nama = document.createElement('span');
+            nama.textContent = s.nama;
+            const kls = document.createElement('span');
+            kls.className = 'kls';
+            kls.textContent = s.kelas;
+            li.append(nama, kls);
+            li.addEventListener('mousedown', e => e.preventDefault()); // jaga fokus kolom nama
+            li.addEventListener('click', () => pilihSiswa(s));
+            saranBox.appendChild(li);
+        });
+        openSaran();
+    }
+    function sorotSaran(idx) {
+        const items = saranBox.querySelectorAll('li[role="option"]');
+        if (!items.length) return;
+        saranIdx = (idx + items.length) % items.length;
+        items.forEach((li, n) => {
+            li.classList.toggle('on', n === saranIdx);
+            li.setAttribute('aria-selected', n === saranIdx ? 'true' : 'false');
+        });
+        namaInput.setAttribute('aria-activedescendant', 'saran-' + saranIdx);
+        items[saranIdx].scrollIntoView({ block: 'nearest' });
+    }
+
+    function pilihSiswa(s) {
+        namaInput.value = s.nama;
+        kelasSel.value = s.kelas;
+        closeSaran();
+        clearErr('p3');
+        if (kelasSel.value === s.kelas) {          // kunci kelas hanya jika kelasnya ada di dropdown
+            selectedSiswa = s;
+            kelasSel.disabled = true;
+            kelasHint.hidden = false;
+        } else {
+            selectedSiswa = null;
+        }
+    }
+    function lepasPilihan() {
+        selectedSiswa = null;
+        kelasSel.disabled = false;
+        kelasSel.value = '';
+        kelasHint.hidden = true;
+    }
+
+    async function cariSiswa(q) {
+        const seq = ++searchSeq;
+        if (searchCtrl) searchCtrl.abort();
+        searchCtrl = new AbortController();
+        infoSaran('Mencari...');
+        try {
+            const url = GAS_URL + (GAS_URL.indexOf('?') === -1 ? '?' : '&') + 'action=cari&q=' + encodeURIComponent(q);
+            const res = await fetch(url, { signal: searchCtrl.signal });
+            const data = await res.json();
+            if (seq !== searchSeq || selectedSiswa) return;
+            if (data.status !== 'sukses' || data.daftar === false) { closeSaran(); return; } // fitur belum aktif: isi manual
+            renderSaran(data.hasil || []);
+        } catch (err) {
+            if (seq === searchSeq) closeSaran();    // gagal/ditinggalkan: isian manual tetap bisa
+        }
+    }
+
+    namaInput.addEventListener('input', () => {
+        if (selectedSiswa && namaInput.value !== selectedSiswa.nama) lepasPilihan();
+        const q = namaInput.value.trim();
+        clearTimeout(searchTimer);
+        if (selectedSiswa || q.length < 3 || !gasReady()) { searchSeq++; closeSaran(); return; }
+        searchTimer = setTimeout(() => cariSiswa(q), 250);
+    });
+    namaInput.addEventListener('keydown', e => {
+        if (saranBox.hidden) return;
+        if (e.key === 'ArrowDown') { e.preventDefault(); sorotSaran(saranIdx + 1); }
+        else if (e.key === 'ArrowUp') { e.preventDefault(); sorotSaran(saranIdx - 1); }
+        else if (e.key === 'Enter' && saranIdx >= 0 && saranItems[saranIdx]) { e.preventDefault(); pilihSiswa(saranItems[saranIdx]); }
+        else if (e.key === 'Escape') { closeSaran(); }
+    });
+    namaInput.addEventListener('blur', () => setTimeout(closeSaran, 150));
 
     /* ---------- Alur ---------- */
     function processIdentity() {
@@ -592,7 +734,7 @@
 
     function submitOrtuTolak(btn) {
         clearErr('p5');
-        if (!checked('bawa_bekal')) return showErr('p5', 'Pilih Persetujuan Siswa tidak mendapat MBG.', form.querySelector('input[name="bawa_bekal"]'));
+        if (!checked('bawa_bekal')) return showErr('p5', 'Pilih salah satu jawaban.', form.querySelector('input[name="bawa_bekal"]'));
         submitForm(btn, 'p5');
     }
 
@@ -663,6 +805,10 @@
 
     function isiLagi() {
         form.reset();
+        selectedSiswa = null;
+        kelasSel.disabled = false;
+        kelasHint.hidden = true;
+        closeSaran();
         document.getElementById('box_alasan_siswa').classList.add('hidden');
         const t = document.getElementById('ratingText');
         t.textContent = 'Ketuk bintang untuk menilai';
